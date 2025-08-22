@@ -12,7 +12,7 @@ type TripCardProps = {
     location: string;
     imageUrl: string;
     tags: string[];
-    price: number;
+    price: number | string;
 };
 
 const TripCard = ({ id, name, location, imageUrl, tags, price }: TripCardProps) => {
