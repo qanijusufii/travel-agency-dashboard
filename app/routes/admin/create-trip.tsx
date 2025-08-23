@@ -34,7 +34,7 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
         budget: '',
         duration: 0,
         groupType: ''
-    })
+    });
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false)
 
@@ -64,10 +64,10 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
             setLoading(false);
             return;
         }
-        try{
-            const response = await fetch('api/create-trip', {
+        try {
+            const response = await fetch('/api/create-trip', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     country: formData.country,
                     numberOfDays: formData.duration,
@@ -75,8 +75,7 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
                     interests: formData.interest,
                     budget: formData.budget,
                     groupType: formData.groupType,
-                    userId: user.$id,
-
+                    userId: user.$id
                 })
             })
 

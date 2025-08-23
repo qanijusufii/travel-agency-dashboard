@@ -67,14 +67,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         ]
         }`;
 
-        // Generate content from AI
         const textResult = await genAI
             .getGenerativeModel({ model: 'gemini-2.0-flash' })
-            .generateContent([prompt]);
+            .generateContent([prompt])
 
         const trip = parseMarkdownToJson(textResult.response.text());
 
-        // Fetch images from Unsplash
         const imageResponse = await fetch(
             `https://api.unsplash.com/search/photos?query=${country} ${interests} ${travelStyle}&client_id=${unsplashApiKey}`
         );
@@ -82,18 +80,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         const imageUrls = (await imageResponse.json()).results.slice(0, 3)
             .map((result: any) => result.urls?.regular || null);
 
-        // Save trip to Appwrite
         const result = await database.createDocument(
             appwriteConfig.databaseId,
             appwriteConfig.tripCollectionId,
             ID.unique(),
             {
-                tripDetails: JSON.stringify(trip),
+                tripDetail: JSON.stringify(trip),
                 createdAt: new Date().toISOString(),
                 imageUrls,
                 userId,
             }
-        );
+        )
 
         return data(result.$id);
 
