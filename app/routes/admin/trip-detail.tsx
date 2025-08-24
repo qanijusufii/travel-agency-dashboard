@@ -7,40 +7,32 @@ import {ChipDirective, ChipListComponent, ChipsDirective} from "@syncfusion/ej2-
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const { tripId } = params;
-    if(!tripId) throw new Error('Trip ID is required');
+    if(!tripId) throw new Error ('Trip ID is required');
 
     const [trip, trips] = await Promise.all([
         getTripById(tripId),
         getAllTrips(4, 0)
     ]);
 
-    const tripData = parseTripData(trip?.tripDetail);
     return {
-        trip: {
-            ...trip,
-            tripData
-        },
-        allTrips: trips.allTrips.map(({ $id, tripDetail, imageUrls }) => ({
+        trip,
+        allTrips: trips.allTrips.map(({ $id, tripDetails, imageUrls }) => ({
             id: $id,
-            ...parseTripData(tripDetail),
+            ...parseTripData(tripDetails),
             imageUrls: imageUrls ?? []
         }))
     }
 }
 
-
 const TripDetail = ({ loaderData }: Route.ComponentProps) => {
-    // @ts-ignore
     const imageUrls = loaderData?.trip?.imageUrls || [];
-    const tripData = loaderData?.trip?.tripData;
+    const tripData = parseTripData(loaderData?.trip?.tripDetails);
 
     const {
         name, duration, itinerary, travelStyle,
         groupType, budget, interests, estimatedPrice,
         description, bestTimeToVisit, weatherInfo, country
     } = tripData || {};
-
-
     const allTrips = loaderData.allTrips as Trip[] | [];
 
     const pillItems = [
@@ -84,7 +76,7 @@ const TripDetail = ({ loaderData }: Route.ComponentProps) => {
                             className={cn('w-full rounded-xl object-cover', i === 0
                                 ? 'md:col-span-2 md:row-span-2 h-[330px]'
                                 : 'md:row-span-1 h-[150px]')}
-                         alt="photo"/>
+                        />
                     ))}
                 </section>
 

@@ -33,9 +33,9 @@ export const clientLoader = async () => {
         await getAllUsers(4, 0),
     ])
 
-    const allTrips = trips.allTrips.map(({ $id, tripDetail, imageUrls }) => ({
+    const allTrips = trips.allTrips.map(({ $id, tripDetails, imageUrls }) => ({
         id: $id,
-        ...parseTripData(tripDetail),
+        ...parseTripData(tripDetails),
         imageUrls: imageUrls ?? []
     }))
 

@@ -86,7 +86,6 @@ export const getUsersAndTripsStats = async (): Promise<DashboardStats> => {
     }
 }
 
-//data we will use for chart
 export const getUserGrowthPerDay = async () => {
     const users = await database.listDocuments(
         appwriteConfig.databaseId,
@@ -105,8 +104,6 @@ export const getUserGrowthPerDay = async () => {
         },
         {}
     );
-
-    [{count: 1, day: 1}]
 
     return Object.entries(userGrowth).map(([day, count]) => ({
         count: Number(count),
@@ -147,7 +144,7 @@ export const getTripsByTravelStyle = async () => {
 
     const travelStyleCounts = trips.documents.reduce(
         (acc: { [key: string]: number }, trip: Document) => {
-            const tripDetail = parseTripData(trip.tripDetail);
+            const tripDetail = parseTripData(trip.tripDetails);
 
             if (tripDetail && tripDetail.travelStyle) {
                 const travelStyle = tripDetail.travelStyle;

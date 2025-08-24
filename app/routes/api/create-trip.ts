@@ -1,8 +1,8 @@
-import { type ActionFunctionArgs, data } from "react-router";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { parseMarkdownToJson } from "~/lib/utils";
-import { appwriteConfig, database } from "~/appwrite/client";
-import { ID } from "appwrite";
+import {type ActionFunctionArgs, data} from "react-router";
+import {GoogleGenerativeAI} from "@google/generative-ai";
+import {parseMarkdownToJson, parseTripData} from "~/lib/utils";
+import {appwriteConfig, database} from "~/appwrite/client";
+import {ID} from "appwrite";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
     const {
@@ -19,7 +19,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const unsplashApiKey = process.env.UNSPLASH_ACCESS_KEY!;
 
     try {
-        // Generate the trip prompt
         const prompt = `Generate a ${numberOfDays}-day travel itinerary for ${country} based on the following user information:
         Budget: '${budget}'
         Interests: '${interests}'
@@ -65,7 +64,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         },
         ...
         ]
-        }`;
+    }`;
 
         const textResult = await genAI
             .getGenerativeModel({ model: 'gemini-2.0-flash' })
@@ -85,17 +84,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             appwriteConfig.tripCollectionId,
             ID.unique(),
             {
-                tripDetail: JSON.stringify(trip),
+                tripDetails: JSON.stringify(trip),
                 createdAt: new Date().toISOString(),
                 imageUrls,
                 userId,
             }
         )
 
-        return data(result.$id);
-
+        return data({ id: result.$id })
     } catch (e) {
-        console.error('Error generating travel plan:', e);
-        throw e;
+        console.error('Error generating travel plan: ', e);
     }
-};
+}

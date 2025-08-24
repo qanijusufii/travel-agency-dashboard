@@ -7,10 +7,8 @@ export const appwriteConfig = {
     databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
     userCollectionId: import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID,
     tripCollectionId: import.meta.env.VITE_APPWRITE_TRIPS_COLLECTION_ID,
-
 }
 
-//creating clients knows exactly which project and endpoint we are working in
 const client = new Client()
     .setEndpoint(appwriteConfig.endpointUrl)
     .setProject(appwriteConfig.projectId)
