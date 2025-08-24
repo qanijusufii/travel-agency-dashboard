@@ -14,8 +14,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
         getAllTrips(4, 0)
     ]);
 
-    const tripData = parseTripData(trip?.tripDetail); // <-- singular
-
+    const tripData = parseTripData(trip?.tripDetail);
     return {
         trip: {
             ...trip,
@@ -31,6 +30,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
 
 const TripDetail = ({ loaderData }: Route.ComponentProps) => {
+    // @ts-ignore
     const imageUrls = loaderData?.trip?.imageUrls || [];
     const tripData = loaderData?.trip?.tripData;
 
@@ -84,7 +84,7 @@ const TripDetail = ({ loaderData }: Route.ComponentProps) => {
                             className={cn('w-full rounded-xl object-cover', i === 0
                                 ? 'md:col-span-2 md:row-span-2 h-[330px]'
                                 : 'md:row-span-1 h-[150px]')}
-                        />
+                         alt="photo"/>
                     ))}
                 </section>
 
